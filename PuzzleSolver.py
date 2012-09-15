@@ -28,8 +28,8 @@ class PuzzleSolver:
 	def solveBoard(self):
 		self.parser.solveBoard()
 		
-	def printBoard(self):
-		self.parser.printBoard()
+	def printBoard(self,debug=False):
+		self.parser.printBoard(debug=debug)
 
 	def writeBoard(self):
 		self.parser.writeBoard()

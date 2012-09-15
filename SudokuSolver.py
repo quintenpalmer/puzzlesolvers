@@ -12,13 +12,14 @@ class SudokuSolver:
 
 	def parseBoard(self):
 		if len(self.filename.split('.')) > 1:
-			if self.filename.split('.')[1] == "csv":
+			suffix = self.filename.split('.')[1]
+			if suffix == "csv":
 				f = open(self.filename,'r')
 				boardString = ''
 				for line in f:
 					boardString += line.rstrip()
 				tmp = boardString.split(',')
-			elif self.filename.split('.')[1] == "sdk":
+			elif suffix == "sdk":
 				f = open(self.filename,'r')
 				boardString = ''
 				for line in f:
@@ -26,7 +27,7 @@ class SudokuSolver:
 				boardString = boardString.rstrip('|')
 				boardString = boardString.replace('| |','|')
 				tmp = boardString.split('|')
-			elif self.filename.split('.')[1] == "raw":
+			elif suffix == "raw":
 				f = open(self.filename,'r')
 				boardString = ''
 				for line in f:
@@ -218,9 +219,9 @@ class SudokuSolver:
 					copy[i][j].append(self.board[i][j][k])
 		return copy
 		
-	def printBoard(self):
+	def printBoard(self,debug=False):
 		if self.functional:
-			self.fout(sys.stdout,'  ')
+			self.fout(sys.stdout,'  ',debug=debug)
 			print "Print : Success!"
 		else:
 			print "Print : Fail! (nonfunctional board provided)"
@@ -245,23 +246,45 @@ class SudokuSolver:
 		else:
 			print "Write : Fail! (nonfunctional board provided)"
 
-	def fout(self,out,indent):
-		it = 0
-		jt = 0
-		for i in xrange(0,9):
-			if divmod(jt,3)[1]==0 and jt != 0:
-					out.write('\n')
-					jt = 0
-			jt += 1
+	def fout(self,out,indent,debug=False):
+		if not debug:
 			it = 0
-			out.write(indent+'|')
-			for j in xrange(0,9):
-				if len(self.board[i][j]) == 1:
-					out.write(str(self.board[i][j][0]))
-				else:
-					out.write('*')
-				out.write('|')
-				it += 1
-				if divmod(it,3)[1]==0 and it != 9:
-					out.write(' |')
-			out.write('\n')
+			jt = 0
+			for i in xrange(0,9):
+				if divmod(jt,3)[1]==0 and jt != 0:
+						out.write('\n')
+						jt = 0
+				jt += 1
+				it = 0
+				out.write(indent+'|')
+				for j in xrange(0,9):
+					if len(self.board[i][j]) == 1:
+						out.write(str(self.board[i][j][0]))
+					else:
+						out.write('*')
+					out.write('|')
+					it += 1
+					if divmod(it,3)[1]==0 and it != 9:
+						out.write(' |')
+				out.write('\n')
+		else:
+			it = 0
+			jt = 0
+			for i in xrange(0,9):
+				if divmod(jt,3)[1]==0 and jt != 0:
+						out.write('\n')
+						jt = 0
+				jt += 1
+				it = 0
+				out.write(indent+'|')
+				for j in xrange(0,9):
+					for k in xrange(0,9):
+						try:
+							out.write(str(self.board[i][j][k]))
+						except:
+							out.write(' ')
+					out.write('|')
+					it += 1
+					if divmod(it,3)[1]==0 and it != 9:
+						out.write(' |')
+				out.write('\n')

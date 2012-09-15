@@ -167,9 +167,9 @@ class HanjieSolver:
 				copy[i].append(self.board[i][j])
 		return copy
 		
-	def printBoard(self):
+	def printBoard(self,debug=False):
 		if self.functional:
-			self.fout(sys.stdout,'  ')
+			self.fout(sys.stdout,'  ',debug=debug)
 			print "Print : Success!"
 		else:
 			print "Print : Fail! (nonfunctional board provided)"
@@ -194,7 +194,7 @@ class HanjieSolver:
 		else:
 			print "Write : Fail! (nonfunctional board provided)"
 
-	def fout(self,out,indent):
+	def fout(self,out,indent,debug=False):
 		for i in xrange(0,self.height):
 			for j in xrange(0,self.width):
 				out.write(self.board[i][j])

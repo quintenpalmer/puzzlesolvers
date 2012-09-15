@@ -15,4 +15,4 @@ for arg in sys.argv[1:]:
 	s.loadBoard()
 	s.solveBoard()
 	#s.writeBoard()
-	s.printBoard()
+	s.printBoard(debug=False)
