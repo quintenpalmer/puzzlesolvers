@@ -13,23 +13,23 @@ class PuzzleSolver:
 	def loadBoard(self):
 		if len(self.filename.split('.')) > 1:
 			if self.filename.split('.')[1] == "sdk":
-				self.parser = SudokuSolver(self.filename)
+				self.solver = SudokuSolver(self.filename)
 			elif self.filename.split('.')[1] == "hj":
-				self.parser = HanjieSolver(self.filename)
+				self.solver = HanjieSolver(self.filename)
 			else:
 				print "Load  : Fail! (invalid filetype given ." + self.filename.split('.')[1] + " not supported)"
 				return 1
 		else:
 			print "Load  : Fail! (input file has no extension)"
 			return 5
-		self.parser.parseBoard()
+		self.solver.parseBoard()
 		print "Load  : Success!"
 
 	def solveBoard(self):
-		self.parser.solveBoard()
+		self.solver.solveBoard()
 		
 	def printBoard(self,debug=False):
-		self.parser.printBoard(debug=debug)
+		self.solver.printBoard(debug=debug)
 
 	def writeBoard(self):
-		self.parser.writeBoard()
+		self.solver.writeBoard()

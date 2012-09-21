@@ -4,6 +4,7 @@ class SudokuSolver:
 	def __init__(self,filename):
 		self.filename = filename
 		self.functional = True
+		self.key = 0
 
 	def changeBoard(self,filename):
 		self.filename = filename
@@ -38,7 +39,7 @@ class SudokuSolver:
 					for j in xrange(0,9):
 						tmp.append(boardString[j+i*9])
 			else:
-				print "Load  : Fail! (invalid filetype given ." + self.filename.split('.')[1] + " not supported)"
+				print "Parse : Fail! (invalid filetype given ." + self.filename.split('.')[1] + " not supported)"
 				self.functional = False
 				return 1
 		else:
@@ -50,7 +51,7 @@ class SudokuSolver:
 				yies = 'y'
 			else:
 				yies = 'ies'
-			print "Load  : Fail! (invalid board provided, " + str(len(tmp)) + " entr" + yies + ")"
+			print "Parse : Fail! (invalid board provided, " + str(len(tmp)) + " entr" + yies + ")"
 			self.functional = False
 			return 2
 		self.board = []
@@ -62,7 +63,7 @@ class SudokuSolver:
 				else:
 					self.board[i].append([int(tmp[j+i*9])])
 		self.functional = True
-		print "Load  : Success!"
+		print "Parse : Success!"
 
 	def getSquare(self,i,j):
 		if i < 3:
@@ -155,6 +156,35 @@ class SudokuSolver:
 				return True
 		return False
 
+	def contains(self,container,sub):
+		for s in sub:
+			if not s in container:
+				return False
+		return True
+
+	def findLast(self,i,j):
+		row = self.getRow(i,j)
+		col = self.getCol(i,j)
+		square = self.getSquare(i,j)
+		pool = []
+		for oi in xrange(row[0],row[0]+1):
+			for oj in xrange(row[1],row[1]+9):
+				if len(self.board[oi][oj]) == 3 or self.board[oi][oj] == 2:
+					pool.append((oi,oj))
+		print pool
+		pool = []
+		for oi in xrange(col[0],col[0]+9):
+			for oj in xrange(col[1],col[1]+1):
+				if len(self.board[oi][oj]) == 3 or self.board[oi][oj] == 2:
+					pool.append((oi,oj))
+		print pool
+		pool = []
+		for oi in xrange(square[0],square[0]+3):
+			for oj in xrange(square[1],square[1]+3):
+				if len(self.board[oi][oj]) == 3 or self.board[oi][oj] == 2:
+					pool.append((oi,oj))
+		print pool
+
 	def checkComplete(self):
 		for i in xrange(0,9):
 			for j in xrange(0,9):
@@ -197,6 +227,7 @@ class SudokuSolver:
 				oldBoard = self.copyBoard()
 				for i in xrange(0,9):
 					for j in xrange(0,9):
+						#self.printBoard(debug=True)
 						self.elimSquare(i,j)
 						self.elimRow(i,j)
 						self.elimColumn(i,j)
@@ -221,8 +252,13 @@ class SudokuSolver:
 		
 	def printBoard(self,debug=False):
 		if self.functional:
-			self.fout(sys.stdout,'  ',debug=debug)
-			print "Print : Success!"
+			warn = self.fout(sys.stdout,'  ',debug=debug)
+			if warn == 0:
+				print "Print : Success!"
+			elif warn == 1:
+				print "Print : Success! (Warning: not a solved board)"
+			elif warn == 2:
+				print "Print : Success! (Warning: broken board provided)"
 		else:
 			print "Print : Fail! (nonfunctional board provided)"
 			return 1
@@ -247,6 +283,27 @@ class SudokuSolver:
 			print "Write : Fail! (nonfunctional board provided)"
 
 	def fout(self,out,indent,debug=False):
+		warn = 0
+		for i in xrange(0,9):
+			for j in xrange(0,9):
+				if len(self.board[i][j]) == 0:
+					warn = 2
+				elif len(self.board[i][j]) > 1:
+					if warn != 2:
+						warn = 1
+		def helper(it,i,ik):
+			out.write(indent+'|')
+			for j in xrange(0,9):
+				for k in xrange(ik,ik+3):
+					try:
+						out.write(str(self.board[i][j][k]))
+					except:
+						out.write('.')
+				out.write('|')
+				it += 1
+				if divmod(it,3)[1]==0 and it != 9:
+					out.write(' |')
+			out.write('\n')
 		if not debug:
 			it = 0
 			jt = 0
@@ -260,6 +317,8 @@ class SudokuSolver:
 				for j in xrange(0,9):
 					if len(self.board[i][j]) == 1:
 						out.write(str(self.board[i][j][0]))
+					elif len(self.board[i][j]) == 0:
+						out.write('.')
 					else:
 						out.write('*')
 					out.write('|')
@@ -276,15 +335,7 @@ class SudokuSolver:
 						jt = 0
 				jt += 1
 				it = 0
-				out.write(indent+'|')
-				for j in xrange(0,9):
-					for k in xrange(0,9):
-						try:
-							out.write(str(self.board[i][j][k]))
-						except:
-							out.write(' ')
-					out.write('|')
-					it += 1
-					if divmod(it,3)[1]==0 and it != 9:
-						out.write(' |')
-				out.write('\n')
+				helper(it,i,0)
+				helper(it,i,3)
+				helper(it,i,6)
+		return warn

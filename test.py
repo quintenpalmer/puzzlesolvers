@@ -2,7 +2,7 @@
 from SudokuSolver import SudokuSolver
 import sys
 
-s = SudokuSolver('boards/example.sdk')
+s = SudokuSolver('sudoku/example.sdk')
 s.parseBoard()
 s.printBoard()
 s.onlyValid(0,0)

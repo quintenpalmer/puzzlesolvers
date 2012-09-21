@@ -78,16 +78,16 @@ class HanjieSolver:
 		print "Load  : Success!"
 
 	def checkComplete(self):
-		for i in xrange(0,9):
-			for j in xrange(0,9):
-				if len(self.board[i][j]) > 1:
+		for i in xrange(0,len(self.board)):
+			for j in xrange(0,len(self.board[i])):
+				if self.board[i][j] == 'g':
 					return False
 		return True
 
 	def checkValid(self):
 		for i in xrange(0,len(self.board)):
 			for j in xrange(0,len(self.board[i])):
-				if self.board[i][j] == 'g':
+				if len(self.board[i][j]) > 1:
 					return False
 		return True
 
@@ -144,14 +144,12 @@ class HanjieSolver:
 	def solveBoard(self):
 		if self.functional:
 			done = False
-			iteration = 0
 			oldBoard = []
 			while not done and oldBoard != self.board:
 				oldBoard = self.copyBoard()
 				self.rowSolve()
 				self.colSolve()
-				iteration += 1
-				#done = self.checkComplete()
+				done = self.checkComplete()
 			if self.checkValid():
 				print "Solve : Success!"
 			else:
