@@ -18,14 +18,15 @@ checkComplete	SudokuSolver.py	/^	def checkComplete(self):$/;"	m	class:SudokuSolv
 checkValid	HanjieSolver.py	/^	def checkValid(self):$/;"	m	class:HanjieSolver
 checkValid	SudokuSolver.py	/^	def checkValid(self):$/;"	m	class:SudokuSolver
 colSolve	HanjieSolver.py	/^	def colSolve(self):$/;"	m	class:HanjieSolver
-contains	SudokuSolver.py	/^	def contains(self,container,sub):$/;"	m	class:SudokuSolver
 containsVal	SudokuSolver.py	/^	def containsVal(self,val,oi,oj):$/;"	m	class:SudokuSolver
 copyBoard	HanjieSolver.py	/^	def copyBoard(self):$/;"	m	class:HanjieSolver
 copyBoard	SudokuSolver.py	/^	def copyBoard(self):$/;"	m	class:SudokuSolver
 elimColumn	SudokuSolver.py	/^	def elimColumn(self,i,j):$/;"	m	class:SudokuSolver
+elimHelper	SudokuSolver.py	/^	def elimHelper(self,i,j,group,fi,fj):$/;"	m	class:SudokuSolver
 elimRow	SudokuSolver.py	/^	def elimRow(self,i,j):$/;"	m	class:SudokuSolver
 elimSquare	SudokuSolver.py	/^	def elimSquare(self,i,j):$/;"	m	class:SudokuSolver
 findLast	SudokuSolver.py	/^	def findLast(self,i,j):$/;"	m	class:SudokuSolver
+findLastHelper	SudokuSolver.py	/^	def findLastHelper(self,i,j,group,fi,fj):$/;"	m	class:SudokuSolver
 first	main.py	/^		first = False$/;"	v
 first	main.py	/^first = True$/;"	v
 fout	HanjieSolver.py	/^	def fout(self,out,indent,debug=False):$/;"	m	class:HanjieSolver
@@ -34,18 +35,18 @@ getCol	SudokuSolver.py	/^	def getCol(self,i,j):$/;"	m	class:SudokuSolver
 getLowHigh	HanjieSolver.py	/^	def getLowHigh(self,i,wh,rc):$/;"	m	class:HanjieSolver
 getRow	SudokuSolver.py	/^	def getRow(self,i,j):$/;"	m	class:SudokuSolver
 getSquare	SudokuSolver.py	/^	def getSquare(self,i,j):$/;"	m	class:SudokuSolver
+helper	SudokuSolver.py	/^		def helper(it,i,ik):$/;"	f	function:SudokuSolver.fout
 loadBoard	PuzzleSolver.py	/^	def loadBoard(self):$/;"	m	class:PuzzleSolver
-nextKey	SudokuSolver.py	/^	def nextKey(self):$/;"	m	class:SudokuSolver
 onlyValid	SudokuSolver.py	/^	def onlyValid(self,i,j):$/;"	m	class:SudokuSolver
+onlyValidHelper	SudokuSolver.py	/^	def onlyValidHelper(self,i,j,group,fi,fj):$/;"	m	class:SudokuSolver
 parseBoard	HanjieSolver.py	/^	def parseBoard(self):$/;"	m	class:HanjieSolver
 parseBoard	SudokuSolver.py	/^	def parseBoard(self):$/;"	m	class:SudokuSolver
 printBoard	HanjieSolver.py	/^	def printBoard(self,debug=False):$/;"	m	class:HanjieSolver
 printBoard	PuzzleSolver.py	/^	def printBoard(self,debug=False):$/;"	m	class:PuzzleSolver
 printBoard	SudokuSolver.py	/^	def printBoard(self,debug=False):$/;"	m	class:SudokuSolver
-resetKey	SudokuSolver.py	/^	def resetKey(self):$/;"	m	class:SudokuSolver
 rowSolve	HanjieSolver.py	/^	def rowSolve(self):$/;"	m	class:HanjieSolver
 s	main.py	/^		s = PuzzleSolver(arg)$/;"	v
-s	test.py	/^s = SudokuSolver('boards\/example.sdk')$/;"	v
+singleOut	SudokuSolver.py	/^	def singleOut(self,triples,doubles):$/;"	m	class:SudokuSolver
 solveBoard	HanjieSolver.py	/^	def solveBoard(self):$/;"	m	class:HanjieSolver
 solveBoard	PuzzleSolver.py	/^	def solveBoard(self):$/;"	m	class:PuzzleSolver
 solveBoard	SudokuSolver.py	/^	def solveBoard(self):$/;"	m	class:SudokuSolver

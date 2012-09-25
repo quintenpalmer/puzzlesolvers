@@ -5,6 +5,7 @@ class SudokuSolver:
 		self.filename = filename
 		self.functional = True
 		self.key = 0
+		self.debug = False
 
 	def changeBoard(self,filename):
 		self.filename = filename
@@ -84,71 +85,23 @@ class SudokuSolver:
 	def getCol(self,i,j):
 		return (0,j)
 
-	def elimSquare(self,i,j):
-		square = self.getSquare(i,j)
-		val = self.board[i][j]
-		if len(val) == 1:
-			val = val[0]
-			for oi in xrange(square[0],square[0]+3):
-				for oj in xrange(square[1],square[1]+3):
-					if (i,j) != (oi,oj) and val in self.board[oi][oj]:
-						self.board[oi][oj].remove(val)
 
-	def elimColumn(self,i,j):
-		col = self.getCol(i,j)
-		val = self.board[i][j]
-		if len(val) == 1:
-			val = val[0]
-			for oi in xrange(col[0],col[0]+9):
-				for oj in xrange(col[1],col[1]+1):
-					if (i,j) != (oi,oj) and val in self.board[oi][oj]:
-						self.board[oi][oj].remove(val)
-
-	def elimRow(self,i,j):
-		row = self.getRow(i,j)
-		val = self.board[i][j]
-		if len(val) == 1:
-			val = val[0]
-			for oi in xrange(row[0],row[0]+1):
-				for oj in xrange(row[1],row[1]+9):
-					if (i,j) != (oi,oj) and val in self.board[oi][oj]:
-						self.board[oi][oj].remove(val)
-
-	def onlyValid(self,i,j):
+	def elim(self,i,j):
 		row = self.getRow(i,j)
 		col = self.getCol(i,j)
 		square = self.getSquare(i,j)
-		if len(self.board[i][j]) > 1:
-			for entry in self.board[i][j]:
-				only = True
-				for oi in xrange(row[0],row[0]+1):
-					for oj in xrange(row[1],row[1]+9):
-						if self.containsVal(entry,oi,oj) and oj != j:
-							only = False
-
-				if only:
-					self.board[i][j] = [entry]
-					return None
-			for entry in self.board[i][j]:
-				only = True
-				for oi in xrange(col[0],col[0]+9):
-					for oj in xrange(col[1],col[1]+1):
-						if self.containsVal(entry,oi,oj) and oi != i:
-							only = False
-
-				if only:
-					self.board[i][j] = [entry]
-					return None
-			for entry in self.board[i][j]:
-				only = True
-				for oi in xrange(square[0],square[0]+3):
-					for oj in xrange(square[1],square[1]+3):
-						if self.containsVal(entry,oi,oj) and (oj,oi) != (j,i):
-							only = False
-
-				if only:
-					self.board[i][j] = [entry]
-					return None
+		self.elimHelper(i,j,row,1,9)
+		self.elimHelper(i,j,col,9,1)
+		self.elimHelper(i,j,square,3,3)
+		
+	def elimHelper(self,i,j,group,fi,fj):
+		val = self.board[i][j]
+		if len(val) == 1:
+			val = val[0]
+			for oi in xrange(group[0],group[0]+fi):
+				for oj in xrange(group[1],group[1]+fj):
+					if (i,j) != (oi,oj) and val in self.board[oi][oj]:
+						self.board[oi][oj].remove(val)
 
 	def containsVal(self,val,oi,oj):
 		for v in self.board[oi][oj]:
@@ -156,39 +109,112 @@ class SudokuSolver:
 				return True
 		return False
 
-	def contains(self,container,sub):
-		for s in sub:
-			if not s in container:
-				return False
-		return True
+	def onlyValid(self,i,j):
+		row = self.getRow(i,j)
+		col = self.getCol(i,j)
+		square = self.getSquare(i,j)
+		if len(self.board[i][j]) > 1:
+			if self.onlyValidHelper(i,j,row,1,9):
+				return None
+			if self.onlyValidHelper(i,j,col,9,1):
+				return None
+			if self.onlyValidHelper(i,j,square,3,3):
+				return None
+
+	def onlyValidHelper(self,i,j,group,fi,fj):
+		for entry in self.board[i][j]:
+			only = True
+			for oi in xrange(group[0],group[0]+fi):
+				for oj in xrange(group[1],group[1]+fj):
+					if self.containsVal(entry,oi,oj) and (oj,oi) != (j,i):
+						only = False
+			if only:
+				self.board[i][j] = [entry]
+				return True
+		return False
 
 	def findLast(self,i,j):
 		row = self.getRow(i,j)
 		col = self.getCol(i,j)
 		square = self.getSquare(i,j)
-		pool = []
-		for oi in xrange(row[0],row[0]+1):
-			for oj in xrange(row[1],row[1]+9):
-				if len(self.board[oi][oj]) == 3 or self.board[oi][oj] == 2:
-					pool.append((oi,oj))
-		print pool
-		pool = []
-		for oi in xrange(col[0],col[0]+9):
-			for oj in xrange(col[1],col[1]+1):
-				if len(self.board[oi][oj]) == 3 or self.board[oi][oj] == 2:
-					pool.append((oi,oj))
-		print pool
-		pool = []
-		for oi in xrange(square[0],square[0]+3):
-			for oj in xrange(square[1],square[1]+3):
-				if len(self.board[oi][oj]) == 3 or self.board[oi][oj] == 2:
-					pool.append((oi,oj))
-		print pool
+		self.findLastHelper(i,j,row,1,9)
+		self.findLastHelper(i,j,col,9,1)
+		self.findLastHelper(i,j,square,3,3)
+
+	def findLastHelper(self,i,j,group,fi,fj):
+		triples = []
+		doubles = []
+		for oi in xrange(group[0],group[0]+fi):
+			for oj in xrange(group[1],group[1]+fj):
+				if len(self.board[oi][oj]) == 3:
+					triples.append((oi,oj))
+				if len(self.board[oi][oj]) == 2:
+					doubles.append((oi,oj))
+		self.singleOut(triples, doubles)
+
+	def singleOut(self,triples,doubles):
+		if len(doubles) > 1:
+			pairs = {}
+			for i,j in doubles:
+				if not tuple(self.board[i][j]) in pairs.keys():
+					pairs[tuple(self.board[i][j])] = 1
+				else:
+					pairs[tuple(self.board[i][j])]+= 1
+			matches = {}
+			for i,j in triples:
+				for key in pairs.keys():
+					val = pairs[key]
+					if val == 2:
+						if set(key).issubset(set(self.board[i][j])):
+							if not tuple(self.board[i][j]) in matches.keys():
+								lastval = [x for x in self.board[i][j] if x not in key]
+								matches[tuple(self.board[i][j])] = (i,j,lastval)
+							else:
+								matches[tuple(self.board[i][j])] = None
+			for key in matches:
+				val = matches[key]
+				if val != None:
+					self.board[val[0]][val[1]] = val[2]
+
+	def entryElim(self,i,j):
+		row = self.getRow(i,j)
+		col = self.getCol(i,j)
+		square = self.getSquare(i,j)
+
+		nums = []
+		for n in xrange(0,9):
+			nums.append([])
+			for si in xrange(square[0],square[0]+3):
+				for sj in xrange(square[1],square[1]+3):
+					for s in self.board[si][sj]:
+						if s == n+1:
+							nums[n].append((si,sj))
+		self.onlyCol(nums)
+		#self.onlyRow(nums)
+
+	def onlyCol(self,nums):
+		print nums
+		for num,entry in enumerate(nums):
+			print entry
+			only = True
+			col = -1
+			for sub in entry:	
+				if col != -1:
+					if sub[1] != col:
+						only = False
+				else:
+					col = sub[1]
+			if only:
+				for i in xrange(0,9):
+					for sub in entry:
+						if not i in entry and num in self.board[col][i]:
+							self.board[col][i].remove(num)
+							print 'removed'
 
 	def checkComplete(self):
 		for i in xrange(0,9):
 			for j in xrange(0,9):
-				if len(self.board[i][j]) > 1:
+				if len(self.board[i][j]) != 1:
 					return False
 		return True
 
@@ -216,7 +242,6 @@ class SudokuSolver:
 							return False
 						if self.board[si][sj][0] in a:
 							return False
-				pass
 		return True
 
 	def solveBoard(self):
@@ -228,14 +253,14 @@ class SudokuSolver:
 				for i in xrange(0,9):
 					for j in xrange(0,9):
 						#self.printBoard(debug=True)
-						self.elimSquare(i,j)
-						self.elimRow(i,j)
-						self.elimColumn(i,j)
+						self.elim(i,j)
 						self.onlyValid(i,j)
+						self.findLast(i,j)
 				done = self.checkComplete()
 			if self.checkValid():
 				print "Solve : Success!"
 			else:
+				self.debug = True
 				print "Solve : Fail! (invalid board produced)"
 		else:
 			print "Solve : Fail! (nonfunctional board provided)"
@@ -283,6 +308,7 @@ class SudokuSolver:
 			print "Write : Fail! (nonfunctional board provided)"
 
 	def fout(self,out,indent,debug=False):
+		debug = debug and self.debug
 		warn = 0
 		for i in xrange(0,9):
 			for j in xrange(0,9):
