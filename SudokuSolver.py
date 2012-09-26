@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 import sys
 class SudokuSolver:
-	def __init__(self,filename):
+	def __init__(self,filename,debug=False):
 		self.filename = filename
 		self.functional = True
 		self.key = 0
-		self.debug = False
+		self.debug = debug
 
 	def changeBoard(self,filename):
 		self.filename = filename
@@ -101,6 +101,11 @@ class SudokuSolver:
 			for oi in xrange(group[0],group[0]+fi):
 				for oj in xrange(group[1],group[1]+fj):
 					if (i,j) != (oi,oj) and val in self.board[oi][oj]:
+						'''
+						if len(self.board[oi][oj]) == 1:
+							print oi,oj,self.board[oi][oj]
+							print 'removed'
+						'''
 						self.board[oi][oj].remove(val)
 
 	def containsVal(self,val,oi,oj):
@@ -189,27 +194,66 @@ class SudokuSolver:
 					for s in self.board[si][sj]:
 						if s == n+1:
 							nums[n].append((si,sj))
-		self.onlyCol(nums)
-		#self.onlyRow(nums)
+		self.onlyCol(nums,square)
+		self.onlyRow(nums,square)
 
-	def onlyCol(self,nums):
-		print nums
+	def onlyRow(self,nums,square):
+		mySquare = []
+		for i in xrange(0,3):
+			mySquare.append(square[0]+i)
+		#print "mySquare is :", mySquare
 		for num,entry in enumerate(nums):
-			print entry
+			num = num + 1
+			only = True
+			row = -1
+			for sub in entry:	
+				if row != -1:
+					if sub[1] != row:
+						only = False
+				else:
+					row = sub[1]
+			if only:
+				#print "only one"
+				#print row
+				for i in xrange(0,9):
+					for sub in entry:
+						if not i in mySquare:
+							if not i in entry and num in self.board[i][row]:
+								print "nums: ", nums
+								print "entry: ", entry
+								self.printBoard(debug=True)
+								print i, row, self.board[i][row]
+								print 'removed', num
+								self.board[i][row].remove(num)
+
+	def onlyCol(self,nums,square):
+		mySquare = []
+		for i in xrange(0,3):
+			mySquare.append(square[1]+i)
+		#print "mySquare is :", mySquare
+		for num,entry in enumerate(nums):
+			num = num + 1
 			only = True
 			col = -1
 			for sub in entry:	
 				if col != -1:
-					if sub[1] != col:
+					if sub[0] != col:
 						only = False
 				else:
-					col = sub[1]
+					col = sub[0]
 			if only:
+				#print "only one"
+				#print col
 				for i in xrange(0,9):
 					for sub in entry:
-						if not i in entry and num in self.board[col][i]:
-							self.board[col][i].remove(num)
-							print 'removed'
+						if not i in mySquare:
+							if not i in entry and num in self.board[col][i]:
+								print "nums: ", nums
+								print "entry: ", entry
+								self.printBoard(debug=True)
+								print col, i, self.board[col][i]
+								print 'removed', num
+								self.board[col][i].remove(num)
 
 	def checkComplete(self):
 		for i in xrange(0,9):
@@ -256,6 +300,7 @@ class SudokuSolver:
 						self.elim(i,j)
 						self.onlyValid(i,j)
 						self.findLast(i,j)
+						self.entryElim(i,j)
 				done = self.checkComplete()
 			if self.checkValid():
 				print "Solve : Success!"

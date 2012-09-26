@@ -8,7 +8,7 @@ if len(sys.argv) < 2:
 first = True
 for arg in sys.argv[1:]:
 	if first:
-		s = PuzzleSolver(arg)
+		s = PuzzleSolver(arg,debug=True)
 		first = False
 	else:
 		s.changeBoard(arg)
@@ -18,5 +18,5 @@ for arg in sys.argv[1:]:
 	#s.printBoard(debug=True)
 	s.printBoard(debug=True)
 
-#s.solver.entryElim(0,0)
+#s.solver.entryElim(4,4)
 #s.printBoard(debug=True)

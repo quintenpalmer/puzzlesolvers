@@ -3,8 +3,9 @@ import sys
 from HanjieSolver import HanjieSolver
 from SudokuSolver import SudokuSolver
 class PuzzleSolver:
-	def __init__(self,filename):
+	def __init__(self,filename,debug=False):
 		self.filename = filename
+		self.debug = debug
 
 	def changeBoard(self,filename):
 		self.filename = filename
@@ -13,7 +14,7 @@ class PuzzleSolver:
 	def loadBoard(self):
 		if len(self.filename.split('.')) > 1:
 			if self.filename.split('.')[1] == "sdk":
-				self.solver = SudokuSolver(self.filename)
+				self.solver = SudokuSolver(self.filename,debug=self.debug)
 			elif self.filename.split('.')[1] == "hj":
 				self.solver = HanjieSolver(self.filename)
 			else:
