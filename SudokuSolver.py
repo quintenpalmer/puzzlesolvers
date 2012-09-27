@@ -101,11 +101,6 @@ class SudokuSolver:
 			for oi in xrange(group[0],group[0]+fi):
 				for oj in xrange(group[1],group[1]+fj):
 					if (i,j) != (oi,oj) and val in self.board[oi][oj]:
-						'''
-						if len(self.board[oi][oj]) == 1:
-							print oi,oj,self.board[oi][oj]
-							print 'removed'
-						'''
 						self.board[oi][oj].remove(val)
 
 	def containsVal(self,val,oi,oj):
@@ -201,7 +196,6 @@ class SudokuSolver:
 		mySquare = []
 		for i in xrange(0,3):
 			mySquare.append(square[0]+i)
-		#print "mySquare is :", mySquare
 		for num,entry in enumerate(nums):
 			num = num + 1
 			only = True
@@ -213,24 +207,16 @@ class SudokuSolver:
 				else:
 					row = sub[1]
 			if only:
-				#print "only one"
-				#print row
 				for i in xrange(0,9):
 					for sub in entry:
 						if not i in mySquare:
 							if not i in entry and num in self.board[i][row]:
-								print "nums: ", nums
-								print "entry: ", entry
-								self.printBoard(debug=True)
-								print i, row, self.board[i][row]
-								print 'removed', num
 								self.board[i][row].remove(num)
 
 	def onlyCol(self,nums,square):
 		mySquare = []
 		for i in xrange(0,3):
 			mySquare.append(square[1]+i)
-		#print "mySquare is :", mySquare
 		for num,entry in enumerate(nums):
 			num = num + 1
 			only = True
@@ -242,17 +228,10 @@ class SudokuSolver:
 				else:
 					col = sub[0]
 			if only:
-				#print "only one"
-				#print col
 				for i in xrange(0,9):
 					for sub in entry:
 						if not i in mySquare:
 							if not i in entry and num in self.board[col][i]:
-								print "nums: ", nums
-								print "entry: ", entry
-								self.printBoard(debug=True)
-								print col, i, self.board[col][i]
-								print 'removed', num
 								self.board[col][i].remove(num)
 
 	def checkComplete(self):
@@ -296,7 +275,6 @@ class SudokuSolver:
 				oldBoard = self.copyBoard()
 				for i in xrange(0,9):
 					for j in xrange(0,9):
-						#self.printBoard(debug=True)
 						self.elim(i,j)
 						self.onlyValid(i,j)
 						self.findLast(i,j)
