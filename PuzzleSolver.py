@@ -2,6 +2,7 @@
 import sys
 from HanjieSolver import HanjieSolver
 from SudokuSolver import SudokuSolver
+
 class PuzzleSolver:
 	def __init__(self,filename,debug=False):
 		self.filename = filename
@@ -28,7 +29,7 @@ class PuzzleSolver:
 
 	def solveBoard(self):
 		self.solver.solveBoard()
-		
+
 	def printBoard(self,debug=False):
 		self.solver.printBoard(debug=debug)
 

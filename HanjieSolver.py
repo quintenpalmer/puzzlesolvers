@@ -164,7 +164,7 @@ class HanjieSolver:
 			for j in xrange(0,len(self.board[i])):
 				copy[i].append(self.board[i][j])
 		return copy
-		
+
 	def printBoard(self,debug=False):
 		if self.functional:
 			self.fout(sys.stdout,'  ',debug=debug)

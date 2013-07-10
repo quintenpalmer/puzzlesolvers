@@ -93,7 +93,7 @@ class SudokuSolver:
 		self.elimHelper(i,j,row,1,9)
 		self.elimHelper(i,j,col,9,1)
 		self.elimHelper(i,j,square,3,3)
-		
+
 	def elimHelper(self,i,j,group,fi,fj):
 		val = self.board[i][j]
 		if len(val) == 1:
@@ -200,7 +200,7 @@ class SudokuSolver:
 			num = num + 1
 			only = True
 			row = -1
-			for sub in entry:	
+			for sub in entry:
 				if row != -1:
 					if sub[1] != row:
 						only = False
@@ -221,7 +221,7 @@ class SudokuSolver:
 			num = num + 1
 			only = True
 			col = -1
-			for sub in entry:	
+			for sub in entry:
 				if col != -1:
 					if sub[0] != col:
 						only = False
@@ -297,7 +297,7 @@ class SudokuSolver:
 				for k in xrange(0,len(self.board[i][j])):
 					copy[i][j].append(self.board[i][j][k])
 		return copy
-		
+
 	def printBoard(self,debug=False):
 		if self.functional:
 			warn = self.fout(sys.stdout,'  ',debug=debug)
